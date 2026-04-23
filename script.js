@@ -14,13 +14,6 @@ document.querySelectorAll(".nav a").forEach(link => {
   });
 });
 
-// Fake form submit for practice demo
-contactForm.addEventListener("submit", function (e) {
-  e.preventDefault();
-  alert("Thank you! Your inquiry has been submitted.");
-  contactForm.reset();
-});
-
 /* =========================================================
    NLP WEBSITE - FULL JAVASCRIPT
    Note:
@@ -53,16 +46,6 @@ if (menuToggle && navMenu) {
   });
 }
 
-/* ===============================
-   3. CONTACT FORM DEMO
-=============================== */
-if (contactForm) {
-  contactForm.addEventListener("submit", function (e) {
-    e.preventDefault();
-    alert("Thank you! Your inquiry has been submitted.");
-    contactForm.reset();
-  });
-}
 
 /* ===============================
    4. ANIMATION HELPERS
@@ -110,6 +93,96 @@ document.addEventListener("DOMContentLoaded", () => {
   /* --------------------------------
      SCROLL REVEAL TARGETS
   -------------------------------- */
+  const revealItems = [
+    ...document.querySelectorAll(".mission-center"),
+    ...document.querySelectorAll(".feature-card"),
+    ...document.querySelectorAll(".product-card-horizontal"),
+    ...document.querySelectorAll(".process-step"),
+    ...document.querySelectorAll(".stat-card"),
+    ...document.querySelectorAll(".contact-info"),
+    ...document.querySelectorAll(".contact-form")
+  ];
+
+  setInitialState(revealItems, 40);
+
+  const observer = new IntersectionObserver(
+    (entries, obs) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          revealElement(entry.target, 100);
+          obs.unobserve(entry.target);
+        }
+      });
+    },
+    {
+      threshold: 0.12,
+      rootMargin: "0px 0px -40px 0px"
+    }
+  );
+
+  revealItems.forEach((item) => {
+    observer.observe(item);
+  });
+});
+const menuToggle = document.getElementById("menuToggle");
+const navMenu = document.getElementById("navMenu");
+
+/* ===============================
+   1. MOBILE MENU
+=============================== */
+if (menuToggle && navMenu) {
+  menuToggle.addEventListener("click", () => {
+    navMenu.classList.toggle("show");
+  });
+
+  const navLinks = document.querySelectorAll(".nav a");
+  navLinks.forEach((link) => {
+    link.addEventListener("click", () => {
+      navMenu.classList.remove("show");
+    });
+  });
+}
+
+/* ===============================
+   2. ANIMATION HELPERS
+=============================== */
+function setInitialState(elements, translateY = 40) {
+  elements.forEach((element) => {
+    if (!element) return;
+    element.style.opacity = "0";
+    element.style.transform = `translateY(${translateY}px)`;
+    element.style.transition = "opacity 0.8s ease, transform 0.8s ease";
+  });
+}
+
+function revealElement(element, delay = 0) {
+  if (!element) return;
+
+  setTimeout(() => {
+    element.style.opacity = "1";
+    element.style.transform = "translateY(0)";
+  }, delay);
+}
+
+/* ===============================
+   3. RUN AFTER PAGE LOAD
+=============================== */
+document.addEventListener("DOMContentLoaded", () => {
+  const heroItems = [
+    document.querySelector(".hero-tag"),
+    document.querySelector(".hero h1"),
+    document.querySelector(".hero-subtitle"),
+    document.querySelector(".mm-highlight"),
+    document.querySelector(".hero-buttons"),
+    document.querySelector(".hero-visual")
+  ].filter(Boolean);
+
+  setInitialState(heroItems, 35);
+
+  heroItems.forEach((item, index) => {
+    revealElement(item, index * 180);
+  });
+
   const revealItems = [
     ...document.querySelectorAll(".mission-center"),
     ...document.querySelectorAll(".feature-card"),
